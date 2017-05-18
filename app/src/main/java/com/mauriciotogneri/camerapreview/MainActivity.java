@@ -1,11 +1,14 @@
 package com.mauriciotogneri.camerapreview;
 
 import android.app.Activity;
+import android.hardware.Camera;
+import android.hardware.Camera.PreviewCallback;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.RelativeLayout;
 
 // https://github.com/pikanji/CameraPreviewSample
-public class CameraPreviewSampleActivity extends Activity
+public class MainActivity extends Activity implements PreviewCallback
 {
     private CameraPreview preview;
     private RelativeLayout container;
@@ -27,6 +30,8 @@ public class CameraPreviewSampleActivity extends Activity
 
         preview = new CameraPreview(this, 0, CameraPreview.LayoutMode.FitToParent);
         container.addView(preview);
+
+        preview.setOneShotPreviewCallback(this);
     }
 
     @Override
@@ -37,5 +42,11 @@ public class CameraPreviewSampleActivity extends Activity
         preview.stop();
         container.removeView(preview);
         preview = null;
+    }
+
+    @Override
+    public void onPreviewFrame(byte[] data, Camera camera)
+    {
+        Log.i("TEST", "DATA: " + data.length);
     }
 }

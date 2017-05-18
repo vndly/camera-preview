@@ -51,7 +51,7 @@ public class ResizableCameraPreview extends CameraPreview
             }
         }
 
-        configureCameraParameters(cameraParams, portrait);
+        configureCameraParameters(cameraParams);
         mSurfaceConfiguring = false;
 
         try
@@ -88,7 +88,7 @@ public class ResizableCameraPreview extends CameraPreview
             return;
         }
 
-        configureCameraParameters(cameraParams, portrait);
+        configureCameraParameters(cameraParams);
         try
         {
             mCamera.startPreview();

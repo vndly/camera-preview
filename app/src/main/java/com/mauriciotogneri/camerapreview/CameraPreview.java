@@ -31,9 +31,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     protected Camera.Size mPictureSize;
     private int mSurfaceChangedCallDepth = 0;
     private LayoutMode mLayoutMode;
-    private int mCenterPosX = -1;
-    private int mCenterPosY;
-    private PreviewReadyCallback mPreviewReadyCallback = null;
+    private PreviewReadyCallback mPreviewReadyCallback;
 
     /**
      * State flag: true when surface's layout size is set and surfaceChanged()
@@ -157,8 +155,8 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
     /**
      * @param portrait
-     * @param reqWidth     must be the value of the parameter passed in surfaceChanged
-     * @param reqHeight    must be the value of the parameter passed in surfaceChanged
+     * @param reqWidth  must be the value of the parameter passed in surfaceChanged
+     * @param reqHeight must be the value of the parameter passed in surfaceChanged
      * @return Camera.Size object that is an element of the list returned from Camera.Parameters.getSupportedPreviewSizes.
      */
     protected Camera.Size determinePreviewSize(boolean portrait, int reqWidth, int reqHeight)
@@ -302,11 +300,6 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         {
             layoutParams.height = layoutHeight;
             layoutParams.width = layoutWidth;
-            if (mCenterPosX >= 0)
-            {
-                layoutParams.topMargin = mCenterPosY - (layoutHeight / 2);
-                layoutParams.leftMargin = mCenterPosX - (layoutWidth / 2);
-            }
             this.setLayoutParams(layoutParams); // this will trigger another surfaceChanged invocation.
             layoutChanged = true;
         }
@@ -367,6 +360,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
             return;
         }
 
+        mCamera.setPreviewCallback(null);
         mCamera.stopPreview();
         mCamera.release();
         mCamera = null;
@@ -375,15 +369,6 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     public boolean isPortrait()
     {
         return (mActivity.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT);
-    }
-
-    public void setOneShotPreviewCallback(PreviewCallback callback)
-    {
-        if (null == mCamera)
-        {
-            return;
-        }
-        mCamera.setOneShotPreviewCallback(callback);
     }
 
     public void setPreviewCallback(PreviewCallback callback)

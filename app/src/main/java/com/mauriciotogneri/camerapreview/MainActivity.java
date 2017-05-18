@@ -31,7 +31,7 @@ public class MainActivity extends Activity implements PreviewCallback
         preview = new CameraPreview(this, 0, CameraPreview.LayoutMode.FitToParent);
         container.addView(preview);
 
-        preview.setOneShotPreviewCallback(this);
+        preview.setPreviewCallback(this);
     }
 
     @Override

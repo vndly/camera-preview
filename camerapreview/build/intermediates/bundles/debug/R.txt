@@ -1,2 +1,0 @@
-int id container 0x7f030000
-int layout preview 0x7f020000

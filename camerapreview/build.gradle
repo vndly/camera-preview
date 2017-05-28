@@ -1,4 +1,7 @@
 apply plugin: 'com.android.library'
+apply plugin: 'maven-publish'
+
+def releaseVersion = '0.2.0'
 
 android
 {
@@ -13,16 +16,36 @@ android
 
     defaultConfig
     {
-        minSdkVersion 18
+        minSdkVersion 14
         targetSdkVersion 22
         versionCode 1
-        versionName '1.0.0'
+        versionName releaseVersion
     }
 
     compileOptions
     {
         sourceCompatibility JavaVersion.VERSION_1_7
         targetCompatibility JavaVersion.VERSION_1_7
+    }
+}
+
+task sourceJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier "source"
+}
+
+publishing {
+    publications {
+        bar(MavenPublication) {
+            groupId 'com.mauriciotogneri'
+            artifactId 'camerapreview'
+            version releaseVersion
+            artifact(sourceJar)
+            artifact("$buildDir/outputs/aar/camerapreview-release.aar")
+        }
+    }
+    repositories {
+        mavenLocal()
     }
 }
 
